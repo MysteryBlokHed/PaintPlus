@@ -69,7 +69,7 @@ void draw() {
       rect(830, 50 + i * 60, 200, 60);
       fill(0);
       noFill();
-      stroke(1);
+      stroke(0);
     }
 
     // Layer preview
@@ -108,12 +108,26 @@ void draw() {
     for(Layer layer : layers.layers)
       if(layer.selected && !layer.hidden) {
         layer.pg.beginDraw();
-        layer.pg.stroke(c);
+        // Change stroke based on which key is pressed
+        // Default stroke color
+        if(lmouseDown) layer.pg.stroke(c);
+        // Erase mode
+        else if(rmouseDown) {
+          layer.pg.stroke(0, 0, 0, 0);
+          layer.pg.blendMode(REPLACE);
+        }
         layer.pg.strokeWeight(brushSize);
         layer.pg.line(mouseX - 180, mouseY - 10, pmouseX - 180, pmouseY - 10);
         layer.pg.endDraw();
         break;
       }
+  }
+
+  // Guideline to show where the mouse will paint
+  if(!lmouseDown) {
+    noFill();
+    stroke(0);
+    ellipse(mouseX, mouseY, brushSize, brushSize);
   }
 }
 
@@ -126,7 +140,7 @@ void mousePressed() {
   yOnMouseDown = mouseY;
 
   // Check if mouse started on canvas
-  if(mouseX >= 180 && mouseX <= 820 && mouseY >= 10 && mouseY <= height-10)
+  if(mouseX >= 180 && mouseX <= 820 && mouseY >= 10 && mouseY <= height - 10)
     painting = true;
 }
 
