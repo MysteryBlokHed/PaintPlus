@@ -6,8 +6,8 @@ A paint program built with Processing 3.
 
 ### Building with the Processing IDE
 
-To build PaintPlus with the [Processing IDE](https://processing.org/download/), open [PaintPlus.pde](PaintPlus/PaintPlus.pde) in
-Processing and run it.
+To build PaintPlus with the [Processing IDE](https://processing.org/download/), open [PaintPlus.pde](PaintPlus/PaintPlus.pde)
+in the Processing IDE and run the sketch.
 
 ### Building with VS Code
 
