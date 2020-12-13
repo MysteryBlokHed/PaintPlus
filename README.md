@@ -9,9 +9,9 @@ A paint program built with Processing 3.
 To build PaintPlus with the [Processing IDE](https://processing.org/download/), open [PaintPlus.pde](PaintPlus/PaintPlus.pde)
 in the Processing IDE and run the sketch.
 
-### Building with VS Code
+### Building with VS Code Tasks
 
-To build with VS Code, first make sure that Processing is in your path, and then press Ctrl + Shift + B to run the build
+To build with VS Code Tasks, first make sure that Processing is in your path, and then press Ctrl + Shift + B to run the build
 task in [tasks.json](.vscode/tasks.json).
 
 ## License
