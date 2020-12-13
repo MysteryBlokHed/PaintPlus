@@ -18,7 +18,7 @@ int yOnMouseDown = 0;
 boolean painting = false;
 float brushSize = 20f;
 
-// Brush color
+// Brush colour
 color c = color(255, 0, 0);
 
 void setup() {
@@ -58,7 +58,43 @@ void draw() {
   text("Layers", 865, 32);
 
   textSize(16);
+
+  // Palette
+  noStroke();
+  // Red
+  fill(#FF0000);
+  ellipse(35, 75, 50, 50);
+  // Blue
+  fill(#0000FF);
+  ellipse(90, 75, 50, 50);
+  // Yellow
+  fill(#FFFF00);
+  ellipse(145, 75, 50, 50);
+  // Green
+  fill(#00FF00);
+  ellipse(35, 130, 50, 50);
+  // Brown
+  fill(#663300);
+  ellipse(90, 130, 50, 50);
+  // Orange
+  fill(#FF9900);
+  ellipse(145, 130, 50, 50);
+  // Dark green
+  fill(#006600);
+  ellipse(35, 185, 50, 50);
+
+  // Current colour
+  fill(0);
+  text("Current Colour:", 32, height-50);
+  // White rectangle under colour to properly show opacity
+  fill(255);
+  rect(32, height-45, 120, 25);
+  fill(c);
+  rect(32, height-45, 120, 25);
+
+  fill(0); // `fill(0)` right before `noFill()` for text
   noFill();
+  stroke(0);
 
   // Draw layers alongside a small preview in layers menu
   for(int i = 0; i < layers.layers.size(); i++) {
@@ -109,7 +145,7 @@ void draw() {
       if(layer.selected && !layer.hidden) {
         layer.pg.beginDraw();
         // Change stroke based on which key is pressed
-        // Default stroke color
+        // Default stroke colour
         if(lmouseDown) layer.pg.stroke(c);
         // Erase mode
         else if(rmouseDown) {
@@ -123,12 +159,9 @@ void draw() {
       }
   }
 
-  // Guideline to show where the mouse will paint
-  if(!lmouseDown) {
-    noFill();
-    stroke(0);
-    ellipse(mouseX, mouseY, brushSize, brushSize);
-  }
+  noFill();
+  stroke(0);
+  ellipse(mouseX, mouseY, brushSize, brushSize);
 }
 
 void mousePressed() {
@@ -176,6 +209,13 @@ void mouseReleased() {
       if(index < layers.layers.size())
         layers.layers.get(index).hidden = !layers.layers.get(index).hidden;
     }
+  }
+
+  // Check if the left mouse was pressed in the palette
+  if(mouseX < 180 && mouseY >= 50) {
+    color newC = get(mouseX, mouseY);
+    // Make sure that the new colour isn't the background gray
+    if(newC != color(200)) c = newC;
   }
 }
 

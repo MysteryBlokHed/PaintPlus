@@ -23,7 +23,7 @@ class LayerManager {
 
   int getFirstVisibleUnlockedLayer() {
     for(Layer layer : this.layers)
-      if(!layer.selected) return this.layers.indexOf(layer);
+      if(!layer.hidden) return this.layers.indexOf(layer);
     return -1;
   }
 
