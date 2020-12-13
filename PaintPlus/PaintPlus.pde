@@ -1,12 +1,25 @@
 import java.util.Collections;
 
+// Painting finals
+final float SCROLL_MULTIPLIER = 3f;
+
 // Layers
 LayerManager layers = new LayerManager(new ArrayList<Layer>());
 
 // Mouse variables
-boolean mouseDown;
-int xOnMouseDown;
-int yOnMouseDown;
+boolean lmouseDown = false;
+boolean mmouseDown = false;
+boolean rmouseDown = false;
+
+int xOnMouseDown = 0;
+int yOnMouseDown = 0;
+
+// Painting variables
+boolean painting = false;
+float brushSize = 20f;
+
+// Brush color
+color c = color(255, 0, 0);
 
 void setup() {
   size(1000, 500);
@@ -50,7 +63,7 @@ void draw() {
   // Draw layers alongside a small preview in layers menu
   for(int i = 0; i < layers.layers.size(); i++) {
     // Blue highlight if layer is selected
-    if(layers.layers.get(i).selected) {
+    if(layers.layers.get(i).selected && !layers.layers.get(i).hidden) {
       noStroke();
       fill(105, 189, 210);
       rect(830, 50 + i * 60, 200, 60);
@@ -66,32 +79,62 @@ void draw() {
     textSize(12);
     text(layers.layers.get(i).label, 920, 80 + i * 60);
 
+    // Label for hidden layers
+    if(layers.layers.get(i).hidden)
+      text("Hid.", 920, 100 + i * 60);
+
     // Border around layer
     rect(830, 50 + i * 60, 80, 60);
   }
 
   // Draw each layer to canvas
   Collections.reverse(layers.layers);
-  for(Layer layer : layers.layers) {
-    image(layer.pg, 180, 10);
-  }
+  for(Layer layer : layers.layers)
+    if(!layer.hidden) image(layer.pg, 180, 10);
 
   Collections.reverse(layers.layers);
 
   // Canvas outline in center of screen
   noFill();
   rect(180, 10, 640, 480);
+
+  // Painting
+  if(painting) {
+    // Select first layer if none is selected
+    if(!layers.selectedLayerPresent())
+      layers.selectLayer(layers.getFirstVisibleUnlockedLayer());
+
+    // Paint on selected layer
+    for(Layer layer : layers.layers)
+      if(layer.selected && !layer.hidden) {
+        layer.pg.beginDraw();
+        layer.pg.stroke(c);
+        layer.pg.strokeWeight(brushSize);
+        layer.pg.line(mouseX - 180, mouseY - 10, pmouseX - 180, pmouseY - 10);
+        layer.pg.endDraw();
+        break;
+      }
+  }
 }
 
 void mousePressed() {
   // Update mouse variables
-  if(mouseButton == LEFT) mouseDown = true;
+  if(mouseButton == LEFT) lmouseDown = true;
+  if(mouseButton == RIGHT) rmouseDown = true;
+  if(mouseButton == CENTER) mmouseDown = true;
   xOnMouseDown = mouseX;
   yOnMouseDown = mouseY;
+
+  // Check if mouse started on canvas
+  if(mouseX >= 180 && mouseX <= 820 && mouseY >= 10 && mouseY <= height-10)
+    painting = true;
 }
 
 void mouseReleased() {
-  if(mouseButton == LEFT) mouseDown = false;
+  if(mouseButton == LEFT) lmouseDown = false;
+  if(mouseButton == RIGHT) rmouseDown = false;
+  if(mouseButton == CENTER) mmouseDown = false;
+  if(painting) painting = false;
 
   // Check if the mouse was pressed & released in the layers panel
   // (excluding the layers label)
@@ -104,10 +147,29 @@ void mouseReleased() {
     int index;
     index = floor((mouseY - 50) / 60);
 
-    // If the mouse was pressed & released on the same layer, select that layer
-    if(index == pIndex && index < layers.layers.size()) {
+    if(mouseButton == LEFT) {
+      // If the mouse was pressed & released on the same layer, select that layer
+      if(index == pIndex && index < layers.layers.size()) {
+          layers.deselectAll();
+          layers.selectLayer(index);
+
+      // If the mouse was pressed on a non-existant layer
+      } else if(index >= layers.layers.size()) {
         layers.deselectAll();
-        layers.selectLayer(index);
       }
+    } else if(mouseButton == CENTER) {
+      // Toggle visibility of the layer the mouse was released on (if it exists)
+      if(index < layers.layers.size())
+        layers.layers.get(index).hidden = !layers.layers.get(index).hidden;
+    }
   }
+}
+
+void mouseWheel(MouseEvent event) {
+  float e = event.getCount();
+  // Change brush size on scroll
+  brushSize -= e * SCROLL_MULTIPLIER;
+
+  // Stop brush size from going below 1
+  if(brushSize < 1) brushSize = 1;
 }
