@@ -1,5 +1,5 @@
 class LayerManager {
-  public ArrayList<Layer> layers;
+  ArrayList<Layer> layers;
 
   LayerManager(ArrayList<Layer> layers) {
     this.layers = layers;
