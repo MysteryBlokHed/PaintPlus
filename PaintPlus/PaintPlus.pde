@@ -119,6 +119,10 @@ void draw() {
     if(layers.layers.get(i).hidden)
       text("Hid.", 920, 100 + i * 60);
 
+    // Label for locked layers
+    if(layers.layers.get(i).locked)
+      text("Lock.", 950, 100 + i * 60);
+
     // Border around layer
     rect(830, 50 + i * 60, 80, 60);
   }
@@ -137,8 +141,10 @@ void draw() {
   // Painting
   if(painting) {
     // Select first layer if none is selected
-    if(!layers.selectedLayerPresent())
-      layers.selectLayer(layers.getFirstVisibleUnlockedLayer());
+    if(!layers.selectedLayerPresent()) {
+      int layer = layers.getFirstVisibleUnlockedLayer();
+      if(layer >= 0) layers.selectLayer(layers.getFirstVisibleUnlockedLayer());
+    }
 
     // Paint on selected layer
     for(Layer layer : layers.layers)
