@@ -99,7 +99,7 @@ void draw() {
   // Draw layers alongside a small preview in layers menu
   for(int i = 0; i < layers.layers.size(); i++) {
     // Blue highlight if layer is selected
-    if(layers.layers.get(i).selected && !layers.layers.get(i).hidden) {
+    if(layers.layers.get(i).selected) {
       noStroke();
       fill(105, 189, 210);
       rect(830, 50 + i * 60, 200, 60);
@@ -148,7 +148,7 @@ void draw() {
 
     // Paint on selected layer
     for(Layer layer : layers.layers)
-      if(layer.selected && !layer.hidden) {
+      if(layer.selected && !layer.hidden && !layer.locked) {
         layer.pg.beginDraw();
         // Change stroke based on which key is pressed
         // Default stroke colour
@@ -213,7 +213,7 @@ void mouseReleased() {
     } else if(mouseButton == CENTER) {
       // Toggle visibility of the layer the mouse was released on (if it exists)
       if(index < layers.layers.size())
-        layers.layers.get(index).hidden = !layers.layers.get(index).hidden;
+        layers.layers.get(index).locked = !layers.layers.get(index).locked;
     }
   }
 
