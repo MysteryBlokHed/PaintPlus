@@ -21,6 +21,17 @@ class LayerManager {
     for (Layer layer : this.layers) layer.selected = false;
   }
 
+  void deleteSelectedLayers() {
+    ArrayList<Integer> markedForDeletion = new ArrayList<Integer>();
+
+    for (int i = 0; i < this.layers.size(); i++)
+      if (this.layers.get(i).selected)
+        markedForDeletion.add(i);
+
+    for (int i : markedForDeletion)
+      this.layers.remove(i);
+  }
+
   int getFirstVisibleUnlockedLayer() {
     for (Layer layer : this.layers)
       if (!layer.hidden && !layer.locked) return this.layers.indexOf(layer);

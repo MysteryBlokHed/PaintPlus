@@ -51,6 +51,7 @@ void setup() {
   keys = new HashMap<Character, Boolean>();
   keys.put((char) SHIFT, false);
   keys.put((char) CONTROL, false);
+  keys.put((char) DELETE, false);
   keys.put('N', false);
 }
 
@@ -272,6 +273,10 @@ void keyPressed() {
   // Control + N = New Layer
   if (keys.get((char) CONTROL) && keys.get('N'))
     layers.layers.add(0, new Layer(createGraphics(640, 480), "New Layer", false));
+  // Delete selected layers
+  else if (keys.get((char) DELETE))
+    if (layers.selectedLayerPresent())
+      layers.deleteSelectedLayers();
 }
 
 void keyReleased() {
