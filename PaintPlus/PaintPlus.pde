@@ -1,10 +1,11 @@
 import java.util.Collections;
 
-// Painting finals
+// Scroll multiplier
 final float SCROLL_MULTIPLIER = 3f;
 
 // Layers
 LayerManager layers = new LayerManager(new ArrayList<Layer>());
+int layerScroll = 0;
 
 // Mouse variables
 boolean lmouseDown = false;
@@ -63,9 +64,6 @@ void draw() {
   fill(0);
   text("Palette", 32, 32);
 
-  // Layers label
-  text("Layers", 865, 32);
-
   textSize(16);
 
   // Palette
@@ -111,30 +109,37 @@ void draw() {
     if (layers.layers.get(i).selected) {
       noStroke();
       fill(105, 189, 210);
-      rect(830, 50 + i * 60, 200, 60);
+      rect(830, 50 + i * 60 - layerScroll, 200, 60);
       fill(0);
       noFill();
       stroke(0);
     }
 
     // Layer preview
-    image(layers.layers.get(i).pg, 830, 50 + i * 60, 80, 60);
+    image(layers.layers.get(i).pg, 830, 50 + i * 60 - layerScroll, 80, 60);
 
     // Layer label
     textSize(12);
-    text(layers.layers.get(i).label, 920, 80 + i * 60);
+    text(layers.layers.get(i).label, 920, 80 + i * 60 - layerScroll);
 
     // Label for hidden layers
     if (layers.layers.get(i).hidden)
-      text("Hid.", 920, 100 + i * 60);
+      text("Hid.", 920, 100 + i * 60 - layerScroll);
 
     // Label for locked layers
     if (layers.layers.get(i).locked)
-      text("Lock.", 950, 100 + i * 60);
+      text("Lock.", 950, 100 + i * 60 - layerScroll);
 
     // Border around layer
-    rect(830, 50 + i * 60, 80, 60);
+    rect(830, 50 + i * 60 - layerScroll, 80, 60);
   }
+
+  fill(200);
+  noStroke();
+  rect(820, 0, 200, 40);
+  fill(0);
+  textSize(32);
+  text("Layers", 865, 32);
 
   // Draw each layer to canvas
   Collections.reverse(layers.layers);
@@ -241,11 +246,22 @@ void mouseReleased() {
 
 void mouseWheel(MouseEvent event) {
   float e = event.getCount();
-  // Change brush size on scroll
-  brushSize -= e * SCROLL_MULTIPLIER;
+  // Check if mouse was off of layers
+  if (mouseX <= 820) {
+    // Change brush size on scroll
+    brushSize -= e * SCROLL_MULTIPLIER;
 
-  // Stop brush size from going below 1
-  if (brushSize < 1) brushSize = 1;
+    // Stop brush size from going below 1
+    if (brushSize < 1) brushSize = 1;
+  } else {
+    layerScroll += e * SCROLL_MULTIPLIER;
+
+    int maxScroll = layers.layers.size() * 60 - 420;
+    if (maxScroll < 0) maxScroll = 0;
+
+    if (layerScroll < 0) layerScroll = 0;
+    if (layerScroll > maxScroll) layerScroll = maxScroll;
+  }
 }
 
 void keyPressed() {
