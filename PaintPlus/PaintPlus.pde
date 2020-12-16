@@ -49,6 +49,8 @@ void setup() {
   // Add used keys to HashMap
   keys = new HashMap<Character, Boolean>();
   keys.put((char) SHIFT, false);
+  keys.put((char) CONTROL, false);
+  keys.put('N', false);
 }
 
 void draw() {
@@ -249,6 +251,11 @@ void mouseWheel(MouseEvent event) {
 void keyPressed() {
   if (keys.containsKey((char) keyCode))
     keys.put((char) keyCode, true);
+
+  // Check key combinations
+  // Control + N = New Layer
+  if (keys.get((char) CONTROL) && keys.get('N'))
+    layers.layers.add(0, new Layer(createGraphics(640, 480), "New Layer", false));
 }
 
 void keyReleased() {
