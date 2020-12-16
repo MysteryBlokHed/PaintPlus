@@ -14,8 +14,8 @@ boolean rmouseDown = false;
 int xOnMouseDown = 0;
 int yOnMouseDown = 0;
 
-// Key-specific variables
-boolean shiftDown = false;
+// Store pressed keys
+HashMap<Character, Boolean> keys;
 
 // Painting variables
 boolean painting = false;
@@ -36,7 +36,7 @@ void setup() {
   background.pg.background(255);
   background.pg.endDraw();
 
-  // Set up circle layer
+  // Set up foreground layer
   circle.pg.beginDraw();
   circle.pg.noStroke();
   circle.pg.fill(255, 0, 0);
@@ -45,6 +45,10 @@ void setup() {
 
   layers.layers.add(background);
   layers.layers.add(0, circle);
+
+  // Add used keys to HashMap
+  keys = new HashMap<Character, Boolean>();
+  keys.put((char) SHIFT, false);
 }
 
 void draw() {
@@ -217,7 +221,7 @@ void mouseReleased() {
       // Hide layer if shift + middle mouse was pressed, lock it if only middle mouse was
       if (index < layers.layers.size()) {
         Layer targetLayer = layers.layers.get(index);
-        if (shiftDown)
+        if (keys.get((char) SHIFT))
           targetLayer.hidden = !targetLayer.hidden;
         else
           targetLayer.locked = !targetLayer.locked;
@@ -243,9 +247,11 @@ void mouseWheel(MouseEvent event) {
 }
 
 void keyPressed() {
-  if (keyCode == SHIFT) shiftDown = true;
+  if (keys.containsKey((char) keyCode))
+    keys.put((char) keyCode, true);
 }
 
 void keyReleased() {
-  if (keyCode == SHIFT) shiftDown = false;
+  if (keys.containsKey((char) keyCode))
+    keys.put((char) keyCode, false);
 }
