@@ -40,7 +40,7 @@ void setup() {
   // Set up foreground layer
   circle.pg.beginDraw();
   circle.pg.noStroke();
-  circle.pg.fill(255, 0, 0);
+  circle.pg.fill(#FF1A1A);
   circle.pg.ellipse(150, 150, 150, 150);
   circle.pg.endDraw();
 
@@ -70,7 +70,7 @@ void draw() {
   // Palette
   noStroke();
   // Red
-  fill(#FF0000);
+  fill(#FF1A1A);
   ellipse(35, 75, 50, 50);
   // Blue
   fill(#0000FF);
@@ -81,7 +81,7 @@ void draw() {
   // Green
   fill(#00FF00);
   ellipse(35, 130, 50, 50);
-  // Brown
+  // Dark brown
   fill(#663300);
   ellipse(90, 130, 50, 50);
   // Orange
@@ -90,6 +90,39 @@ void draw() {
   // Dark green
   fill(#006600);
   ellipse(35, 185, 50, 50);
+  // White
+  fill(255);
+  ellipse(90, 185, 50, 50);
+  // Sky blue
+  fill(#87CEEB);
+  ellipse(145, 185, 50, 50);
+  // Pink
+  fill(#FF69B4);
+  ellipse(35, 240, 50, 50);
+  // Purple
+  fill(#6600CC);
+  ellipse(90, 240, 50, 50);
+  // Lighter purple
+  fill(#9900FF);
+  ellipse(145, 240, 50, 50);
+  // Gray
+  fill(150);
+  ellipse(35, 295, 50, 50);
+  // Aqua
+  fill(#00FFFF);
+  ellipse(90, 295, 50, 50);
+  // Light brown
+  fill(#86592D);
+  ellipse(145, 295, 50, 50);
+  // Redder orange
+  fill(#FF471A);
+  ellipse(35, 350, 50, 50);
+  // Redder pink
+  fill(#FF3399);
+  ellipse(90, 350, 50, 50);
+  // Beige
+  fill(#F5F5DC);
+  ellipse(145, 350, 50, 50);
 
   // Current colour
   fill(0);
@@ -151,6 +184,7 @@ void draw() {
 
   // Canvas outline in center of screen
   noFill();
+  stroke(0);
   rect(180, 10, 640, 480);
 
   // Painting
