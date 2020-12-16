@@ -14,6 +14,9 @@ boolean rmouseDown = false;
 int xOnMouseDown = 0;
 int yOnMouseDown = 0;
 
+// Key-specific variables
+boolean shiftDown = false;
+
 // Painting variables
 boolean painting = false;
 float brushSize = 20f;
@@ -26,7 +29,7 @@ void setup() {
 
   // Create default layers
   Layer background = new Layer(createGraphics(640, 480), "Background", false);
-  Layer circle = new Layer(createGraphics(640, 480), "Circle", false);
+  Layer circle = new Layer(createGraphics(640, 480), "Foreground", false);
 
   // Set up background layer
   background.pg.beginDraw();
@@ -211,9 +214,14 @@ void mouseReleased() {
         layers.deselectAll();
       }
     } else if(mouseButton == CENTER) {
-      // Toggle visibility of the layer the mouse was released on (if it exists)
-      if(index < layers.layers.size())
-        layers.layers.get(index).locked = !layers.layers.get(index).locked;
+        // Hide layer if shift + middle mouse was pressed, lock it if only middle mouse was
+        if(index < layers.layers.size()) {
+          Layer targetLayer = layers.layers.get(index);
+          if(shiftDown)
+            targetLayer.hidden = !targetLayer.hidden;
+          else
+            targetLayer.locked = !targetLayer.locked;
+        }
     }
   }
 
@@ -232,4 +240,12 @@ void mouseWheel(MouseEvent event) {
 
   // Stop brush size from going below 1
   if(brushSize < 1) brushSize = 1;
+}
+
+void keyPressed() {
+  if(keyCode == SHIFT) shiftDown = true;
+}
+
+void keyReleased() {
+  if(keyCode == SHIFT) shiftDown = false;
 }
