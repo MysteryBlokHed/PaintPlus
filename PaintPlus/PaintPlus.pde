@@ -100,9 +100,9 @@ void draw() {
   stroke(0);
 
   // Draw layers alongside a small preview in layers menu
-  for(int i = 0; i < layers.layers.size(); i++) {
+  for (int i = 0; i < layers.layers.size(); i++) {
     // Blue highlight if layer is selected
-    if(layers.layers.get(i).selected) {
+    if (layers.layers.get(i).selected) {
       noStroke();
       fill(105, 189, 210);
       rect(830, 50 + i * 60, 200, 60);
@@ -119,11 +119,11 @@ void draw() {
     text(layers.layers.get(i).label, 920, 80 + i * 60);
 
     // Label for hidden layers
-    if(layers.layers.get(i).hidden)
+    if (layers.layers.get(i).hidden)
       text("Hid.", 920, 100 + i * 60);
 
     // Label for locked layers
-    if(layers.layers.get(i).locked)
+    if (layers.layers.get(i).locked)
       text("Lock.", 950, 100 + i * 60);
 
     // Border around layer
@@ -132,8 +132,8 @@ void draw() {
 
   // Draw each layer to canvas
   Collections.reverse(layers.layers);
-  for(Layer layer : layers.layers)
-    if(!layer.hidden) image(layer.pg, 180, 10);
+  for (Layer layer : layers.layers)
+    if (!layer.hidden) image(layer.pg, 180, 10);
 
   Collections.reverse(layers.layers);
 
@@ -142,22 +142,22 @@ void draw() {
   rect(180, 10, 640, 480);
 
   // Painting
-  if(painting) {
+  if (painting) {
     // Select first layer if none is selected
-    if(!layers.selectedLayerPresent()) {
+    if (!layers.selectedLayerPresent()) {
       int layer = layers.getFirstVisibleUnlockedLayer();
-      if(layer >= 0) layers.selectLayer(layers.getFirstVisibleUnlockedLayer());
+      if (layer >= 0) layers.selectLayer(layers.getFirstVisibleUnlockedLayer());
     }
 
     // Paint on selected layer
-    for(Layer layer : layers.layers)
-      if(layer.selected && !layer.hidden && !layer.locked) {
+    for (Layer layer : layers.layers)
+      if (layer.selected && !layer.hidden && !layer.locked) {
         layer.pg.beginDraw();
         // Change stroke based on which key is pressed
         // Default stroke colour
-        if(lmouseDown) layer.pg.stroke(c);
+        if (lmouseDown) layer.pg.stroke(c);
         // Erase mode
-        else if(rmouseDown) {
+        else if (rmouseDown) {
           layer.pg.stroke(0, 0, 0, 0);
           layer.pg.blendMode(REPLACE);
         }
@@ -175,26 +175,26 @@ void draw() {
 
 void mousePressed() {
   // Update mouse variables
-  if(mouseButton == LEFT) lmouseDown = true;
-  if(mouseButton == RIGHT) rmouseDown = true;
-  if(mouseButton == CENTER) mmouseDown = true;
+  if (mouseButton == LEFT) lmouseDown = true;
+  if (mouseButton == RIGHT) rmouseDown = true;
+  if (mouseButton == CENTER) mmouseDown = true;
   xOnMouseDown = mouseX;
   yOnMouseDown = mouseY;
 
   // Check if mouse started on canvas
-  if(mouseX >= 180 && mouseX <= 820 && mouseY >= 10 && mouseY <= height - 10)
+  if (mouseX >= 180 && mouseX <= 820 && mouseY >= 10 && mouseY <= height - 10)
     painting = true;
 }
 
 void mouseReleased() {
-  if(mouseButton == LEFT) lmouseDown = false;
-  if(mouseButton == RIGHT) rmouseDown = false;
-  if(mouseButton == CENTER) mmouseDown = false;
-  if(painting) painting = false;
+  if (mouseButton == LEFT) lmouseDown = false;
+  if (mouseButton == RIGHT) rmouseDown = false;
+  if (mouseButton == CENTER) mmouseDown = false;
+  if (painting) painting = false;
 
   // Check if the mouse was pressed & released in the layers panel
   // (excluding the layers label)
-  if(xOnMouseDown > 820 && mouseX > 820 && yOnMouseDown > 40 && mouseY > 40) {
+  if (xOnMouseDown > 820 && mouseX > 820 && yOnMouseDown > 40 && mouseY > 40) {
     // Get the index of the layer the mouse was pressed on
     int pIndex;
     pIndex = floor((yOnMouseDown - 50) / 60);
@@ -203,33 +203,33 @@ void mouseReleased() {
     int index;
     index = floor((mouseY - 50) / 60);
 
-    if(mouseButton == LEFT) {
+    if (mouseButton == LEFT) {
       // If the mouse was pressed & released on the same layer, select that layer
-      if(index == pIndex && index < layers.layers.size()) {
-          layers.deselectAll();
-          layers.selectLayer(index);
+      if (index == pIndex && index < layers.layers.size()) {
+        layers.deselectAll();
+        layers.selectLayer(index);
 
-      // If the mouse was pressed on a non-existant layer
-      } else if(index >= layers.layers.size()) {
+        // If the mouse was pressed on a non-existant layer
+      } else if (index >= layers.layers.size()) {
         layers.deselectAll();
       }
-    } else if(mouseButton == CENTER) {
-        // Hide layer if shift + middle mouse was pressed, lock it if only middle mouse was
-        if(index < layers.layers.size()) {
-          Layer targetLayer = layers.layers.get(index);
-          if(shiftDown)
-            targetLayer.hidden = !targetLayer.hidden;
-          else
-            targetLayer.locked = !targetLayer.locked;
-        }
+    } else if (mouseButton == CENTER) {
+      // Hide layer if shift + middle mouse was pressed, lock it if only middle mouse was
+      if (index < layers.layers.size()) {
+        Layer targetLayer = layers.layers.get(index);
+        if (shiftDown)
+          targetLayer.hidden = !targetLayer.hidden;
+        else
+          targetLayer.locked = !targetLayer.locked;
+      }
     }
   }
 
   // Check if the left mouse was pressed in the palette
-  if(mouseX < 180 && mouseY >= 50) {
+  if (mouseX < 180 && mouseY >= 50) {
     color newC = get(mouseX, mouseY);
     // Make sure that the new colour isn't the background gray
-    if(newC != color(200)) c = newC;
+    if (newC != color(200)) c = newC;
   }
 }
 
@@ -239,13 +239,13 @@ void mouseWheel(MouseEvent event) {
   brushSize -= e * SCROLL_MULTIPLIER;
 
   // Stop brush size from going below 1
-  if(brushSize < 1) brushSize = 1;
+  if (brushSize < 1) brushSize = 1;
 }
 
 void keyPressed() {
-  if(keyCode == SHIFT) shiftDown = true;
+  if (keyCode == SHIFT) shiftDown = true;
 }
 
 void keyReleased() {
-  if(keyCode == SHIFT) shiftDown = false;
+  if (keyCode == SHIFT) shiftDown = false;
 }
