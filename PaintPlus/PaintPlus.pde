@@ -243,11 +243,11 @@ void mouseReleased() {
   if (xOnMouseDown > 820 && mouseX > 820 && yOnMouseDown > 40 && mouseY > 40) {
     // Get the index of the layer the mouse was pressed on
     int pIndex;
-    pIndex = floor((yOnMouseDown - 50) / 60);
+    pIndex = floor((yOnMouseDown - 50 + layerScroll)/60);
 
     // Get the index of the layer the mouse was released on
     int index;
-    index = floor((mouseY - 50) / 60);
+    index = floor((mouseY - 50 + layerScroll)/60);
 
     if (mouseButton == LEFT) {
       // If the mouse was pressed & released on the same layer, select that layer
